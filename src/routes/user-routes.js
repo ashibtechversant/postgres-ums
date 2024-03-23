@@ -1,17 +1,17 @@
 const express = require('express');
-const studentController = require('../controllers/student-controller');
+const userController = require('../controllers/user-controller');
 const methodNotAllowedMiddleware = require('../middleware/method-not-allowed-middleware');
 
 const router = express.Router();
 
 router
   .route('/')
-  .get(studentController.getAllStudents)
+  .get(userController.getAllUsers)
   .all(methodNotAllowedMiddleware);
 
 router
   .route('/:id')
-  .get(studentController.getStudent)
+  .get(userController.getUser)
   .all(methodNotAllowedMiddleware);
 
 module.exports = router;

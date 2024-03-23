@@ -1,7 +1,8 @@
 const express = require('express');
 const methodNotAllowedMiddleware = require('../middleware/method-not-allowed-middleware');
 const responseFormatter = require('../utils/response-formatter');
-const studentRouter = require('./student-routes');
+const userRouter = require('./user-routes');
+const adminRouter = require('./admin-routes');
 
 const router = express.Router();
 
@@ -13,6 +14,7 @@ router
   })
   .all(methodNotAllowedMiddleware);
 
-router.use('/students', studentRouter);
+router.use('/users', userRouter);
+router.use('/admin', adminRouter);
 
 module.exports = router;
