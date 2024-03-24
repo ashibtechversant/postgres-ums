@@ -14,7 +14,7 @@
   },
   "plugins": ["prettier"],
   "rules": {
-    "prettier/prettier": "warn"
+    "prettier/prettier": ["warn", { "endOfLine": "auto" }]
     // "no-unused-vars": "warn",
     // "no-console": "off",
     // "func-names": "off",

@@ -3,6 +3,7 @@ const methodNotAllowedMiddleware = require('../middleware/method-not-allowed-mid
 const responseFormatter = require('../utils/response-formatter');
 const userRouter = require('./user-routes');
 const adminRouter = require('./admin-routes');
+const authenticationRouter = require('./authentication-routes');
 
 const router = express.Router();
 
@@ -14,6 +15,7 @@ router
   })
   .all(methodNotAllowedMiddleware);
 
+router.use('/auth', authenticationRouter);
 router.use('/users', userRouter);
 router.use('/admin', adminRouter);
 

@@ -1,6 +1,6 @@
 const userServices = require('../services/user-services');
 const responseFormatter = require('../utils/response-formatter');
-const checkIntegerId = require('../validation/check-integer-id');
+const checkUserIntegerId = require('../validation/check-user-id-integer');
 const checkUserExists = require('../validation/check-user-exists');
 
 module.exports = {
@@ -18,7 +18,7 @@ module.exports = {
   async getUser(req, res, next) {
     try {
       const { id } = req.params;
-      checkIntegerId(id);
+      checkUserIntegerId(id);
       const user = await userServices.getUserById(id);
       checkUserExists(user);
       const response = responseFormatter('User retrieved successfully', {

@@ -1,19 +1,12 @@
-const createHttpError = require('http-errors');
-const { verifyToken } = require('../utils/jwt-utils');
+const userServices = require('../services/user-services');
+const checkRoleAuthorization = require('../validation/check-role-authorization');
 
-module.exports = async (req, _, next) => {
+module.exports = (role) => async (req, _, next) => {
   try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader) throw createHttpError.Unauthorized('invalid token');
-    const [, token] = authHeader.split(' ');
-    if (!token) throw createHttpError.BadRequest('missing token');
-    try {
-      const payload = verifyToken(token);
-      req.payload = payload;
-      next();
-    } catch (error) {
-      throw createHttpError.Unauthorized('invalid token');
-    }
+    const { userId } = req.payload;
+    const user = await userServices.getUserById(userId);
+    checkRoleAuthorization(user.role, role);
+    next();
   } catch (error) {
     next(error);
   }

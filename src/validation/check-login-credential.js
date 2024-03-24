@@ -1,10 +1,10 @@
 const createHttpError = require('http-errors');
 const errorWithDetailsFormatter = require('../utils/error-with-details-formatter');
 
-module.exports = (user) => {
-  if (!user) {
-    const createdError = createHttpError.NotFound('User Not Found');
-    const details = `No registered user is available with the provided user id.`;
+module.exports = (credential) => {
+  if (!credential) {
+    const createdError = createHttpError.Unauthorized('Authentication Failed');
+    const details = `Invalid email or password.`;
     const error = errorWithDetailsFormatter(createdError, details);
     throw error;
   }

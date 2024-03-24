@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../connection');
-const bcryptUtils = require('../utils/bcrypt-utils');
+const bcryptHelpers = require('../utils/bcrypt-helpers');
 
 const User = sequelize.define(
   'user',
@@ -49,8 +49,16 @@ const User = sequelize.define(
 
 User.beforeCreate(async (user) => {
   const newUser = user;
-  const hashedPassword = await bcryptUtils.hashPassword(newUser.password);
+  const hashedPassword = await bcryptHelpers.hashPassword(newUser.password);
   newUser.password = hashedPassword;
 });
+
+User.verifyPassword = async (password, hashedPassword) => {
+  const doesPasswordsMatch = await bcryptHelpers.comparePassword(
+    password,
+    hashedPassword
+  );
+  return doesPasswordsMatch;
+};
 
 module.exports = User;
