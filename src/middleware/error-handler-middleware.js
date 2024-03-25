@@ -3,7 +3,7 @@ const responseFormatter = require('../utils/response-formatter');
 const errorWithDetailsFormatter = require('../utils/error-with-details-formatter');
 
 module.exports = async (err, _, res, next) => {
-  // console.error(err);
+  console.error(err);
 
   const errors = {
     SequelizeUniqueConstraintError() {

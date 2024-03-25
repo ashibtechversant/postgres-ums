@@ -1,8 +1,8 @@
 const User = require('../../db/models/user');
 
 module.exports = {
-  async getAllUsers() {
-    const users = await User.findAll();
+  async getAllUsers(limit = 10, page = 1) {
+    const users = await User.findAll({ offset: page, limit });
     return users;
   },
   async getUserById(id) {

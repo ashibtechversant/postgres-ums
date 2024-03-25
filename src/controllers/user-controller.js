@@ -4,10 +4,14 @@ const checkUserIntegerId = require('../validation/check-user-id-integer');
 const checkUserExists = require('../validation/check-user-exists');
 
 module.exports = {
-  async getAllUsers(_, res, next) {
+  async getAllUsers(req, res, next) {
     try {
-      const users = await userServices.getAllUsers();
+      const { limit, page } = req.query;
+      const users = await userServices.getAllUsers(limit, page);
       const response = responseFormatter('All users retrieved successfully', {
+        page,
+        limit,
+        totalCount: users.length,
         users,
       });
       res.json(response);
