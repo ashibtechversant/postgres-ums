@@ -44,7 +44,7 @@ const User = sequelize.define(
       type: DataTypes.DATE,
     },
   },
-  { paranoid: true, modelName: 'user' }
+  { timestamps: true, paranoid: true, modelName: 'user' }
 );
 
 User.beforeCreate(async (user) => {

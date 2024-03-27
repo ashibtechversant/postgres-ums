@@ -1,11 +1,10 @@
 const createHttpError = require('http-errors');
 const errorWithDetailsFormatter = require('../utils/error-with-details-formatter');
 
-module.exports = (id) => {
-  const convertedId = +id;
-  if (Number.isNaN(convertedId)) {
-    const createdError = createHttpError.BadRequest('Invalid User Id');
-    const details = `The provided User Id is not an integer.`;
+module.exports = (role) => {
+  if (role === 'admin') {
+    const createdError = createHttpError.Forbidden('Action is blocked');
+    const details = 'The current operation cannot be performed on admin.';
     const error = errorWithDetailsFormatter(createdError, details);
     throw error;
   }

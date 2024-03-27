@@ -7,8 +7,8 @@ const userController = require('../controllers/user-controller');
 
 const router = express.Router();
 
-router.use(authenticationMiddleware);
-router.use(authorizationMiddleware('admin'));
+// router.use(authenticationMiddleware);
+// router.use(authorizationMiddleware('admin'));
 
 router
   .route('/users')

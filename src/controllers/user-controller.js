@@ -1,17 +1,25 @@
 const userServices = require('../services/user-services');
 const responseFormatter = require('../utils/response-formatter');
-const checkUserIntegerId = require('../validation/check-user-id-integer');
-const checkUserExists = require('../validation/check-user-exists');
+const validateUserId = require('../validation/validate-user-id');
+const validateUser = require('../validation/validate-user');
+const validatePaginationParams = require('../validation/validate-pagination-params');
 
 module.exports = {
   async getAllUsers(req, res, next) {
     try {
-      const { limit, page } = req.query;
-      const users = await userServices.getAllUsers(limit, page);
-      const response = responseFormatter('All users retrieved successfully', {
-        page,
-        limit,
-        totalCount: users.length,
+      const { page = 1, limit = 10, search = '' } = req.query;
+      validatePaginationParams(page, limit);
+      const offset = (page - 1) * limit;
+      const { users, usersCount } =
+        await userServices.getUsersWithPaginationAndSearch(
+          offset,
+          limit,
+          search
+        );
+      const response = responseFormatter('Users retrieved successfully', {
+        page: +page,
+        limit: +limit,
+        usersCount,
         users,
       });
       res.json(response);
@@ -21,10 +29,10 @@ module.exports = {
   },
   async getUser(req, res, next) {
     try {
-      const { id } = req.params;
-      checkUserIntegerId(id);
-      const user = await userServices.getUserById(id);
-      checkUserExists(user);
+      const { userId } = req.params;
+      validateUserId(userId);
+      const user = await userServices.getUserById(userId);
+      validateUser(user);
       const response = responseFormatter('User retrieved successfully', {
         user,
       });

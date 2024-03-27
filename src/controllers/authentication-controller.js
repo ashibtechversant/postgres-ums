@@ -1,6 +1,6 @@
 const userLoginSchema = require('../schemas/user-login-schema');
 const userServices = require('../services/user-services');
-const checkLoginCredential = require('../validation/check-login-credential');
+const validateLoginCredential = require('../validation/validate-login-credential');
 const responseFormatter = require('../utils/response-formatter');
 const generateAuthData = require('../utils/generate-auth-data');
 
@@ -9,12 +9,12 @@ module.exports = {
     try {
       const loginData = await userLoginSchema.validateAsync(req.body);
       const user = await userServices.getUserByEmail(loginData.email);
-      checkLoginCredential(user);
+      validateLoginCredential(user);
       const isPasswordValid = await userServices.verifyPassword(
         loginData.password,
         user.password
       );
-      checkLoginCredential(isPasswordValid);
+      validateLoginCredential(isPasswordValid);
       const userAuthData = generateAuthData(user);
       const response = responseFormatter('login successful', {
         user: userAuthData,

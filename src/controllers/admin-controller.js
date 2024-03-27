@@ -1,8 +1,9 @@
 const userServices = require('../services/user-services');
 const responseFormatter = require('../utils/response-formatter');
 const adminRegisterUserSchema = require('../schemas/admin-register-user-schema');
-const checkUserIdInteger = require('../validation/check-user-id-integer');
+const validateUserId = require('../validation/validate-user-id');
 const generateAuthData = require('../utils/generate-auth-data');
+const validateNotAdmin = require('../validation/validate-not-admin');
 
 module.exports = {
   async registerNewUser(req, res, next) {
@@ -21,11 +22,10 @@ module.exports = {
   async deleteUser(req, res, next) {
     try {
       const { userId } = req.params;
-      checkUserIdInteger(userId);
-      const user = await userServices.deleteUser(userId);
-      const response = responseFormatter('User deleted successfully', {
-        user,
-      });
+      validateUserId(userId);
+      validateNotAdmin(userId);
+      await userServices.deleteUser(userId);
+      const response = responseFormatter('User deleted successfully');
       res.json(response);
     } catch (error) {
       next(error);
@@ -34,7 +34,7 @@ module.exports = {
   async updateUser(req, res, next) {
     try {
       const { userId } = req.params;
-      checkUserIdInteger(userId);
+      validateUserId(userId);
       const userData = await adminRegisterUserSchema.validateAsync(req.body);
       const user = await userServices.updateUser(userId, userData);
       const response = responseFormatter('User updated successfully', {
